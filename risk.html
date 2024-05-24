@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradingBoost - Блок 1</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TradingBoost</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Обучение</a></li>
+                    <li><a href="#">Инструменты</a></li>
+                    <li><a href="#">Стратегии</a></li>
+                    <li><a href="../analitic/analitic.html">Обзор рынков</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="mblock1">
+            <div class="container2">
+                <div class="calculators-wrapper"> <div class="calculator">
+                        <h2>Калькулятор Take-Profit</h2>
+                        <div class="input-group">
+                            <label for="lossPercentTP">Процент убыточных сделок (%):</label>
+                            <input type="number" id="lossPercentTP" value="75">
+                        </div>
+                        <div class="input-group">
+                            <label for="stopLossTP">Stop-Loss:</label>
+                            <input type="number" id="stopLossTP" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="currentPriceTP">Текущая цена актива:</label>
+                            <input type="number" id="currentPriceTP" value="0">
+                        </div>
+                        <div class="results">
+                            <div class="result-item">
+                                <h3>Take-Profit:</h3>
+                                <span id="takeProfitResult">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calculator">
+                        <h2>Калькулятор Stop-Loss</h2>
+                        <div class="input-group">
+                            <label for="tradeTypeSL">Тип сделки SELL/BUY:</label>
+                            <select id="tradeTypeSL">
+                                <option value="SELL">SELL</option>
+                                <option value="BUY">BUY</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="investmentAmountSL">Сумма инвестиций:</label>
+                            <input type="number" id="investmentAmountSL" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="leverageSL">Кредитное плечо:</label>
+                            <input type="number" id="leverageSL" value="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="maxLossSL">Сумма максимально допустимого убытка:</label>
+                            <input type="number" id="maxLossSL" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="currentPriceSL">Текущая цена актива:</label>
+                            <input type="number" id="currentPriceSL" value="0">
+                        </div>
+                        <div class="results">
+                            <div class="result-item">
+                                <h3>Stop-Loss:</h3>
+                                <span id="stopLossResult">0</span>
+                            </div>
+                        </div>
+                    </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Калькулятор Take-Profit
+        const lossPercentTPInput = document.getElementById('lossPercentTP');
+        const stopLossTPInput = document.getElementById('stopLossTP');
+        const currentPriceTPInput = document.getElementById('currentPriceTP');
+        const takeProfitResultSpan = document.getElementById('takeProfitResult');
+
+        function calculateTakeProfit() {
+            const lossPercent = parseFloat(lossPercentTPInput.value) / 100;
+            const stopLoss = parseFloat(stopLossTPInput.value);
+            const currentPrice = parseFloat(currentPriceTPInput.value);
+
+            const profitMultiplier = (lossPercent / (1 - lossPercent)) * 2.5; // 2.5 - поправка на риски
+            const takeProfit = currentPrice + (profitMultiplier * Math.abs(currentPrice - stopLoss));
+
+            takeProfitResultSpan.textContent = takeProfit.toFixed(5);
+        }
+
+        lossPercentTPInput.addEventListener('input', calculateTakeProfit);
+        stopLossTPInput.addEventListener('input', calculateTakeProfit);
+        currentPriceTPInput.addEventListener('input', calculateTakeProfit);
+
+        // Калькулятор Stop-Loss
+        const tradeTypeSLSelect = document.getElementById('tradeTypeSL');
+        const investmentAmountSLInput = document.getElementById('investmentAmountSL');
+        const leverageSLInput = document.getElementById('leverageSL');
+        const maxLossSLInput = document.getElementById('maxLossSL');
+        const currentPriceSLInput = document.getElementById('currentPriceSL');
+        const stopLossResultSpan = document.getElementById('stopLossResult');
+
+        function calculateStopLoss() {
+            const tradeType = tradeTypeSLSelect.value;
+            const investmentAmount = parseFloat(investmentAmountSLInput.value);
+            const leverage = parseFloat(leverageSLInput.value);
+            const maxLoss = parseFloat(maxLossSLInput.value);
+            const currentPrice = parseFloat(currentPriceSLInput.value);
+
+            let stopLoss;
+            if (tradeType === 'SELL') {
+                stopLoss = currentPrice + (maxLoss / (investmentAmount * leverage));
+            } else { // BUY
+                stopLoss = currentPrice - (maxLoss / (investmentAmount * leverage));
+            }
+
+            stopLossResultSpan.textContent = stopLoss.toFixed(5);
+        }
+
+        tradeTypeSLSelect.addEventListener('change', calculateStopLoss);
+        investmentAmountSLInput.addEventListener('input', calculateStopLoss);
+        leverageSLInput.addEventListener('input', calculateStopLoss);
+        maxLossSLInput.addEventListener('input', calculateStopLoss);
+        currentPriceSLInput.addEventListener('input', calculateStopLoss);
+    </script>
+</body>
+</html>
