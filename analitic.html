@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradingBoost - Обзор рынка</title>
+<link rel="stylesheet" href="style.css">
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>TradingBoost</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Обучение</a></li>
+                    <li><a href="#">Инструменты</a></li>
+                    <li><a href="#">Стратегии</a></li>
+                    <li><a href="../analitic/analitic.html">Обзор рынков</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="mblock1">
+            <div class="container2">
+                <input type="text" id="assetInput" placeholder="Введите тикер (например, btcusd)">
+                <div id="tradingview_chart"></div>    
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const assetInput = document.getElementById("assetInput");
+        const chartContainer = document.getElementById("tradingview_chart");
+      
+        function updateChart(symbol) {
+          new TradingView.widget({
+            "container_id": "tradingview_chart",
+            "autosize": true,
+            "symbol": symbol, // Тикер, введенный пользователем
+            // ... другие настройки графика ...
+          });
+        }
+      
+        // Изначально отображаем график BTCUSD
+        updateChart("BTCUSD");
+      
+        assetInput.addEventListener("change", () => {
+          const newSymbol = assetInput.value.toUpperCase();
+          updateChart(newSymbol);
+        });
+      </script>
+      
+
+</body>
+</html>
